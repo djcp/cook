@@ -2,6 +2,9 @@ require 'rubygems'
 require './lib/temperature_reader'
 require 'bundler/setup'
 require 'pi_piper'
+require 'sqlite3'
+
+db = SQLite3::Database.new "./db/temperatures.db"
 
 pin = PiPiper::Pin.new(:pin => 23, :direction => :out)
 temp_reader = TemperatureReader.new
@@ -14,11 +17,12 @@ begin
   while true do
     temp_reader.read
     if temp_reader.valid_reading?
+      db.execute("INSERT INTO temperatures (read_time, desired_temp, actual_temp) VALUES (?, ?, ?)", 
+        [Time.now.to_s, desired_temp, temp_reader.temperature]
+      )
       if temp_reader.temperature < desired_temp
-        puts "Turning on: want #{desired_temp}, at #{temp_reader.temperature}"
         pin.on
       else
-        puts "Turning off: want #{desired_temp}, at #{temp_reader.temperature}"
         pin.off
       end
     end
@@ -27,5 +31,6 @@ begin
 rescue => e
   puts e.inspect
 ensure
+  db.close
   pin.off
 end
