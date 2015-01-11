@@ -2,19 +2,30 @@ GEM
   remote: https://rubygems.org/
   specs:
     chartkick (1.3.2)
+    dotenv (1.0.2)
     erubis (2.7.0)
     ffi (1.9.6)
+    foreman (0.77.0)
+      dotenv (~> 1.0.2)
+      thor (~> 0.19.1)
+    kgio (2.9.2)
     pi_piper (1.3.2)
       ffi
     rack (1.6.0)
     rack-protection (1.5.3)
       rack
+    raindrops (0.13.0)
     sinatra (1.4.5)
       rack (~> 1.4)
       rack-protection (~> 1.4)
       tilt (~> 1.3, >= 1.3.4)
     sqlite3 (1.3.10)
+    thor (0.19.1)
     tilt (1.4.1)
+    unicorn (4.8.3)
+      kgio (~> 2.6)
+      rack
+      raindrops (~> 0.7)
 
 PLATFORMS
   ruby
@@ -22,6 +33,8 @@ PLATFORMS
 DEPENDENCIES
   chartkick
   erubis
+  foreman
   pi_piper
   sinatra
   sqlite3
+  unicorn
