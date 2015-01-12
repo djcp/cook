@@ -1,28 +1,27 @@
-<form action='/dishes' method="POST">
-  <fieldset>
-    <legend>Cook something</legend>
-    <label for="name">Name of your dish: </label>
-    <input id="name" type="text" name="name" required /> <br />
+<form action='/dishes' method="POST" id="start_cooking">
+<fieldset>
+  <legend>Cook something</legend>
+  <label for="name">Name of your dish: </label>
+  <input id="name" type="text" name="name" required /> <br />
 
-    <label for="desired_temp">Desired Temp (celcius): </label>
-    <input id="desired_temp" type="number" step="0.1" name="desired_temp" value="57.2" required />
+  <label for="desired_temp">Desired Temp (celcius): </label>
+  <input id="desired_temp" type="number" step="0.1" name="desired_temp" value="57.2" required />
 
-    <input type="submit" value="Cook!" />
-  </fieldset>
-</form>
-
-<form action='/dishes/stop_cooking' method="POST">
-  <fieldset>
-    <legend>Stop cooking</legend>
-    <input type="submit" value="All done!" />
-  </fieldset>
+  <input type="submit" value="Cook!" />
+</fieldset>
 </form>
 
 <% if @active_dish %>
-  <article>
-  <h2><%= @active_dish['name'] %></h2>
-  <p>Desired Temperature: <%= @active_dish['desired_temp'] %></p>
-  </article>
+  <form action='/dishes/stop_cooking' method="POST" id="stop_cooking">
+    <fieldset>
+      <legend>Currently Cooking</legend>
+      <strong><%= @active_dish['name'] %></strong> at a desired temperature: <%= @active_dish['desired_temp'] %>
+      <input type="submit" value="All done!" />
+    </fieldset>
+  </form>
 <% end %>
+<br style="clear: both;" />
 
-<%= line_chart @chart_data, min: @min, max: @max %>
+<% if @active_dish %>
+  <%= line_chart "/temperatures/#{@active_dish['id']}", min: @min, max: @max %>
+<% end %>
